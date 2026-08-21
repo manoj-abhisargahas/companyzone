@@ -1,0 +1,16 @@
+# Ignore the Python virtual environment
+.venv/
+
+# Ignore the local database
+.sqlite3
+
+# Ignore uploaded media files
+companyzone/media/
+
+# Ignore log files
+django_performance.log
+*.log
+
+# Ignore Python cache files
+**/__pycache__/
+*.pyc

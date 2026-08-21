@@ -1,0 +1,32 @@
+{% extends 'companyzone/logged_base.html' %}
+{% load static %}
+{% load role_tags %}
+
+{% block title %}Dashboard {{ block.super }}{% endblock %}
+
+{% block internal_css %}
+<style>
+</style>
+{% endblock %}
+
+{% block mi-0 %}active{% endblock %}
+
+{% block heading %}
+<div class="page-head">
+    <h1>Dashboard</h1>
+</div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="greet-user">
+        Hello!&nbsp;
+        {% if user|has_group:"Front Office Staff" %}
+            <span>Front Office Staff</span>
+        {% endif %}
+
+        {% if user.is_superuser %}
+            <span>Admin</span>
+        {% endif %}
+    </div>
+{% endblock %}

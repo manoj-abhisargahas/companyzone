@@ -1,0 +1,34 @@
+{% extends 'companyzone/base.html' %}
+{% load static %}
+
+{% block main_body %}
+<div class="logged-main">
+    <div class="left-menu">
+        <a class="brand-logo" href="{% url 'dashboard_url' %}">
+            <img src="{% static 'images/companyzone-logo-vert-thin.png' %}">
+        </a>
+        <div class="menu-items">
+            <a class="menu-item {% block mi-0 %}{% endblock %}" href="{% url 'dashboard_url' %}">Dashboard</a>
+            {% if user.is_superuser %}
+            <a class="menu-item {% block mi-1 %}{% endblock %}" href="{% url 'newemployee_url' %}">New Employee</a>
+            {% endif %}
+            <a class="menu-item {% block mi-2 %}{% endblock %}" href="{% url 'viewemployees_url' %}">View Employees</a>
+            <a class="menu-item {% block mi-3 %}{% endblock %}" href="{% url 'viewdeptstats_url' %}">Departments</a>
+            {% if user.is_superuser %}
+            <a class="menu-item {% block mi-4 %}{% endblock %}" href="{% url '3dmodeltest_url' %}">3D Test</a>
+            {% endif %}
+        </div>
+        <form method="post" action="{% url 'logout_url' %}" class="logout">
+            {% csrf_token %}
+            <input type="submit" value="logout">
+        </form>
+    </div>
+    <div class="right-container">
+        {% block heading %}{% endblock %}
+        {% block top_output %}{% endblock %}
+        {% block input_form %}{% endblock %}
+        {% block content %}{% endblock %}
+        {% block btm_output %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

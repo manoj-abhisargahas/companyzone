@@ -1,0 +1,95 @@
+{% extends 'companyzone/logged_base.html' %}
+{% load static %}
+
+{% block title %}Update Employee{{ block.super }}{% endblock %}
+
+{% block internal_css %}
+<style>
+form a[class|='btn'] {
+    margin-top: 10px;
+}
+</style>
+{% endblock %}
+
+{% block mi-2 %}active{% endblock %}
+
+{% block heading %}
+<div class="page-head">
+    <h1>Update Employee - <span class="ename">{{ emp_name }}</span></h1>
+</div>
+{% endblock %}
+
+{% block top_output %}
+{% include 'companyzone/output.html' %}
+{% endblock %}
+
+{% block input_form %}
+<div class="content_scroll">
+    <form action="{% url 'updateemployee_url' emp_no=emp_no %}" method="POST" 
+        onsubmit="return validateNewEmployee(event)" 
+        enctype="multipart/form-data" 
+        class="elev_box_mdl w540px">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td><label for="emp_no">Employee No:</label></td>
+                <td>
+                    <input type="text" disabled id="emp_no" value="{{ emp_no }}">
+                </td>
+            </tr>
+            <tr>
+                <td><label for="emp_name">Employee Name:</label></td>
+                <td><input type="text" name="emp_name" id="emp_name" value="{{ emp_name }}" required maxlength="30"></td>
+            </tr>
+            <tr>
+                <td><label for="emp_sal">Employee Salary:</label></td>
+                <td><input type="text" name="emp_sal" id="emp_sal" value="{{ emp_sal }}" required></td>
+            </tr>
+            <tr>
+                <td><label for="emp_pfpic">Profile Pic:</label></td>
+                <td><input type="file" name="emp_pfpic" id="emp_pfpic" accept=".png, .jpeg, .jpg, image/png, image/jpeg, image/jpg"></td>
+            </tr>
+            <tr>
+                <td><label for="emp_intvid">Interview Video:</label></td>
+                <td><input type="file" name="emp_intvid" id="emp_intvid" accept=".mp4, video/mp4"></td>
+            </tr>
+            <tr>
+                <td><label for="emp_resume">Resume:</label></td>
+                <td><input type="file" name="emp_resume" id="emp_resume" accept=".pdf, application/pdf"></td>
+            </tr>
+            <tr>
+                <td><label for="emp_dept">Department:</label></td>
+                <td>
+                    <select name="emp_dept" id="emp_dept">
+                        <option value="">-- select --</option>
+                        {% for dept in depts %}
+                            <option value="{{ dept.dept_id }}" {% if emp_dept == dept.dept_id %}selected{% endif %}>
+                                {{ dept.dept_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="emp_loc">Location:</label></td>
+                <td>
+                    <select name="emp_loc" id="emp_loc">
+                        <option value="">-- select --</option>
+                        {% for location in locations %}
+                            <option value="{{ location.loc_id }}" {% if emp_loc == location.loc_id %}selected{% endif %}>
+                                {{ location.loc_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <input type="submit" class="btn-st1 dark w100p wspace lfont" value="Update Employee" name="submit">
+        <a href="{% url 'viewdetailemployee_url' emp_no=emp_no %}" class="btn-st1 light w100p wspace lfont">Cancel</a>
+    </form>
+</div>
+{% endblock %}
+
+{% block addtl_js_script %}
+<script src="{% static 'empapp/js/form_script.js' %}"></script>
+{% endblock %}

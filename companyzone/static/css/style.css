@@ -1,0 +1,676 @@
+:root {
+    --primary-font-family: "Roboto", Corbel, Avenir, "Lucida Grande", "Lucida Sans", sans-serif;
+    --brand-color: #111111;
+    --brand-color-light: #333;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    font-family: var(--primary-font-family);
+    background-color: rgb(250, 250, 250);
+}
+
+h1 {
+    color: var(--brand-color);
+}
+
+.main {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.logged-main {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 200px auto;
+    grid-template-rows: 100%;
+}
+
+.left-menu {
+    display: flex;
+    flex-direction: column;
+    word-break: break-word;
+    box-shadow: rgba(0, 0, 0, 0.26) -1px 1px 7px 0px;
+    background-color: rgb(255, 255, 255);
+    overflow: auto;
+}
+
+a.brand-logo {
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+.center-logo a.brand-logo {
+    margin: 40px auto 0px;
+    width: 300px;
+    display: block;
+}
+
+.left-menu a.brand-logo {
+    margin: 24px 0px 40px;
+    padding: 0px 40px 0px 20px;
+}
+
+a.brand-logo img {
+    width: 100%;
+}
+
+.menu-items {
+    display: flex;
+    flex-direction: column;
+}
+
+a.menu-item {
+    text-decoration: none;
+    padding: 14px 20px;
+    border-top: 1px solid rgb(221, 221, 221);
+    color: var(--brand-color-light);
+    transition: background 0.3s, color 0.3s;
+}
+
+a.menu-item:last-child {
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
+
+a.menu-item:hover, a.menu-item.active {
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
+}
+
+a.menu-item:active {
+    color: rgb(255, 255, 255);
+    background-color: rgb(45, 45, 45);
+}
+
+.right-container {
+    display: grid;
+    grid-template-rows: max-content max-content auto;
+    padding: 0px 14px;
+    box-sizing: border-box;
+}
+
+.page-head {
+    display: flex;
+    align-items: center;
+}
+
+.page-head h1 {
+    font-weight: 400;
+}
+
+.page-head h1 .ename {
+    color: #666;
+}
+
+.right-container .page-head {
+    justify-content: space-between;
+    padding: 0px 10px;
+}
+
+.greet-user {
+    padding: 0px 10px;
+    font-size: 40px;
+    font-weight: 400;
+    margin-top: 50px;
+}
+
+.greet-user > span {
+    color: rgb(102, 102, 102);
+}
+
+.content_scroll {
+    overflow: auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.elev_box_mdl {
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.26) -1px 1px 7px 0px;
+}
+
+.elev_box_mdl table {
+    width: 100%;
+}
+
+.elev_box_mdl.w540px {
+    width: 540px;
+    padding: 24px;
+    margin: 0px auto;
+}
+
+form.elev_box_mdl {
+    min-width: max-content;
+    padding: 24px;
+    margin: 0px auto;
+}
+
+table.elev_box_mdl {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.elev_box_mdl thead {
+    background-color: black;
+    color: white;
+}
+
+table.elev_box_mdl th, table.elev_box_mdl td {
+    padding: 10px 20px;
+    text-align: left;
+    border-bottom: 1px solid rgb(224, 224, 224);
+    border-left: 1px solid rgb(224, 224, 224);
+}
+
+table.elev_box_mdl .fit {
+    width: 1%;
+}
+
+table.elev_box_mdl .nopad {
+    padding: 0px;
+}
+
+table.elev_box_mdl .pad6 {
+    padding: 6px;
+}
+
+.align_r, table td.align_r {
+    text-align: right;
+}
+
+.align_c, table th.align_c, table td.align_c {
+    text-align: center;
+}
+
+.fontclr_gray {
+    color: rgb(153, 153, 153);
+}
+
+.elev_box_mdl table td:first-child {
+    width: 36%;
+    min-width: 160px;
+    font-size: 18px;
+}
+
+.elev_box_mdl table td {
+    padding: 7px 0px;
+}
+
+.elev_box_mdl p label {
+    margin-bottom: 7px;
+    display: inline-block;
+}
+
+[class^="media"] {
+    display: flex;
+    width: max-content;
+    position: relative;
+    cursor: pointer;
+}
+
+[class^="media"].center {
+    text-align: center;
+    margin: 0px auto;
+}
+
+.br4 {
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.br8 {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+a[class^="media"]:hover::before {
+    content: "";
+    background-color: rgba(0, 0, 0, 0.28);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    pointer-events: none;
+}
+
+/* video play button */
+.media-vid::after {
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgb(255, 255, 255);
+    border-width: 12px 0px 12px 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s;
+    pointer-events: none;
+}
+
+/* video play button - on hover */
+.media-vid:hover::after {
+    transform: translate(-50%, -50%) scale(1.15);
+}
+
+.intvid {
+    width: auto;
+    height: 60px;
+}
+
+.pfpic {
+    width: 60px;
+    height: 60px;
+    /* object-fit: cover;
+    margin: 0px auto;
+    display: block; */
+}
+
+.wh300px {
+    width: 300px;
+    height: 300px;
+}
+
+.resume-icon img {
+    height: 44px;
+    opacity: 0.3;
+    transition: opacity 0.1s;
+}
+
+.resume-icon img:hover {
+    opacity: 0.5;
+}
+
+input, select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 4px 10px;
+    font-size: 16px;
+}
+
+input[type="text"], input[type="password"], select {
+    height: 36px;
+}
+
+input[type="file"], select {
+    cursor: pointer;
+}
+
+form [class|="btn"] {
+    margin-top: 20px;
+}
+
+[class|="btn"] ~ [class|="btn"] {
+    margin-top: 10px;
+}
+
+form.logout {
+    padding-right: 20px;
+    margin-top: auto;
+}
+
+form.logout input[type="submit"] {
+    padding: 10px 0px;
+    border-radius: 0px 20px 20px 0px;
+    border: 1px solid rgb(221, 221, 221);
+    cursor: pointer;
+    color: rgb(51, 51, 51);
+    transition: background 0.3s, color 0.3s;
+    margin: 20px 0px 30px;
+}
+
+form.logout input[type="submit"]:hover {
+    background-color: rgb(221, 221, 221);
+}
+
+.submit-btns {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+}
+
+.btn-st1 {
+    cursor: pointer;
+    border-radius: 7px;
+    padding: 4px 8px;
+    border-width: medium;
+    border-style: none;
+    border-color: currentcolor;
+    border-image: none;
+    display: flex;
+    width: max-content;
+    height: max-content;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.btn-st1.w100p {
+    width: 100%;
+}
+
+.btn-st1.wfit {
+    padding: 12px 8px;
+}
+
+.btn-st1.wspace {
+    padding: 12px 20px;
+}
+
+.btn-st1.lfont {
+    font-size: 18px;
+}
+
+.btn-st1.dark {
+    background-color: rgb(17, 17, 17);
+    color: rgb(255, 255, 255);
+}
+
+.btn-st1.dark:hover {
+    background-color: rgb(43, 43, 43);
+}
+
+.btn-st1.light {
+    background-color: rgb(231, 231, 231);
+    color: rgb(0, 0, 0);
+}
+
+.btn-st1.light:hover {
+    background-color: rgb(220, 220, 220);
+}
+
+.btn-st1:active, .btn-st1:focus {
+    outline: grey solid 2px;
+    outline-offset: 3px;
+}
+
+table td.btn {
+    padding: 6px 8px;
+}
+
+[class|="btn"].mtop20px {
+    margin-top: 20px;
+}
+
+a[class|="btn"] {
+    text-decoration: none;
+    text-align: center;
+}
+
+td a[class|="btn"] {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 3px;
+}
+
+.btn-st1 img.btn-icon {
+    width: 20px;
+}
+
+button.reset {
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.output .body {
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    display: none;
+}
+
+.output .body.error {
+    display: block;
+    color: rgb(202, 15, 15);
+    background-color: rgb(255, 224, 224);
+    border: 1px solid rgb(255, 187, 187);
+}
+
+.output .body.success {
+    display: block;
+    color: rgb(2, 103, 39);
+    background-color: rgb(195, 246, 199);
+    border: 1px solid rgb(146, 233, 177);
+}
+
+.max_w300 {
+    min-width: 0;
+    max-width: 300px;
+    white-space: wrap;
+    overflow-wrap: break-word;
+}
+
+.max_w500 {
+    min-width: 0;
+    max-width: 500px;
+    white-space: wrap;
+    overflow-wrap: break-word;
+}
+
+.max_w700 {
+    min-width: 0;
+    max-width: 700px;
+    white-space: wrap;
+    overflow-wrap: break-word;
+}
+
+.onclick_name {
+    color: var(--brand-color);
+    text-decoration: none;
+}
+.onclick_name:hover {
+    opacity: 0.4;
+    font-weight: 600;
+}
+
+/* 1. Global Black Fullscreen Container */
+#black-fullscreen {
+    display: none; /* Hidden by default */
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#black-fullscreen.visible {
+    display: flex;
+    animation: BlackBg_FadeIn 0.1s ease-out forwards;
+}
+
+#black-fullscreen.close {
+    display: flex;
+    animation: BlackBg_FadeOut 0.1s ease-out forwards;
+}
+
+/* 2. Top Toolbar Panel */
+#bfs-toolbar {
+    width: 100%;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    box-sizing: border-box;
+}
+
+#bfs-toolbar #media-head-title,
+#bfs-toolbar #page-indicator {
+    color: #fff;
+    font-size: 16px;
+}
+
+.right-icons {
+    display: flex;
+    gap: 12px;
+}
+
+.right-icons .icon-btn {
+    display: block;
+    width: 24px;
+    height: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-sizing: content-box;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.right-icons .icon-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.right-icons .icon-btn:active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.svg-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.right-icons .svg-icon svg path {
+    fill: #fff;
+}
+
+.css-icon {
+    font-family: system-ui, -apple-system, "Segoe UI", "Segoe UI Symbol", Roboto, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.right-icons .css-icon {
+    color: #fff;
+    font-weight: 300;
+}
+
+.download-btn svg path, 
+.open-btn svg path {
+    stroke-width: 2px;
+    stroke: white;
+}
+
+.zoomin-btn::before {
+    content: "\FF0B";
+    font-size: 24px;
+    line-height: 0;
+}
+
+.zoomout-btn::before {
+    content: "\2212";
+    font-size: 24px;
+    line-height: 0;
+}
+
+.close-btn::before {
+    content: "\2715";
+    font-size: 17px;
+    margin-top: -4px;
+    display: block;
+}
+
+/* 3. Document Area */
+#bfs-viewport {
+    width: 100%;
+    min-height: 0;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 0 48px;
+    box-sizing: border-box;
+}
+
+#bfs-viewport > * {
+    flex-shrink: 0;
+}
+
+#bfs-viewport.center {
+    justify-content: center;
+}
+
+.pdf-page {
+    background-color: #fff;
+    max-width: 90%;
+}
+
+@keyframes BlackBg_FadeIn {
+    from {
+        background-color: rgba(0, 0, 0, 0);
+    }
+    to {
+        background-color: rgba(0, 0, 0, 0.9);
+    }
+}
+
+@keyframes BlackBg_FadeOut {
+    from {
+        background-color: rgba(0, 0, 0, 0.9);
+    }
+    to {
+        background-color: rgba(0, 0, 0, 0);
+    }
+}
+
+.scale-in-anim {
+    animation: ScaleIn 0.2s ease-out forwards;
+}
+
+.scale-out-anim {
+    animation: ScaleOut 0.2s ease-out forwards;
+}
+
+@keyframes ScaleIn {
+    from {
+        width: var(--w_start, 240px);
+        height: var(--h_start, 240px);;
+        opacity: 0;
+    }
+    to {
+        width: var(--w_end, 300px);
+        height: var(--h_end, 300px);
+        opacity: 1;
+    }
+}
+
+@keyframes ScaleOut {
+    from {
+        width: var(--w_end, 300px);
+        height: var(--h_end, 300px);
+        opacity: 1;
+    }
+    to {
+        width: var(--w_start, 240px);;
+        height: var(--h_start, 240px);;
+        opacity: 0;
+    }
+}

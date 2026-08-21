@@ -1,0 +1,86 @@
+{% extends 'companyzone/logged_base.html' %}
+{% load static %}
+
+{% block title %}Departments Statistics{{ block.super }}{% endblock %}
+
+{% block internal_css %}
+<style>
+</style>
+{% endblock %}
+
+{% block mi-3 %}active{% endblock %}
+
+{% block heading %}
+<div class="page-head">
+    <h1>Department Statistics</h1>
+</div>
+{% endblock %}
+
+{% block top_output %}
+{% include 'companyzone/output_msg.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="content_scroll">
+    <table class="elev_box_mdl">
+        <thead>
+            <tr>
+                <th class="fit">Dept ID</th>
+                <th>Dept Name</th>
+                <th class="fit">Emp Count</th>
+                {% if user.is_superuser %}
+                <th class="fit">Emp Min Sal</th>
+                <th class="fit">Emp Max Sal</th>
+                <th class="fit">Emp Avg Sal</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for dstat in depts_stats %}
+                <tr>
+                    <td class="align_r">
+                        {% if dstat.dept_id %}
+                            {{ dstat.dept_id }}
+                        {% else %}
+                            <span class="fontclr_gray">-</span>
+                        {% endif %}
+                    </td>
+                    <td class="max_w700">
+                        {% if dstat.dept_name %}
+                            {{ dstat.dept_name }}
+                        {% else %}
+                            <span class="fontclr_gray">No Dept</span>
+                        {% endif %}
+                    </td>
+                    <td class="align_r">{{ dstat.emp_count }}</td>
+                    {% if user.is_superuser %}
+                    <td class="align_r">
+                        {% if dstat.emp_min_sal %}
+                            {{ dstat.emp_min_sal }}
+                        {% else %}
+                            <span class="fontclr_gray">-</span>
+                        {% endif %}
+                    </td>
+                    <td class="align_r">
+                        {% if dstat.emp_max_sal %}
+                            {{ dstat.emp_max_sal }}
+                        {% else %}
+                            <span class="fontclr_gray">-</span>
+                        {% endif %}
+                    </td>
+                    <td class="align_r">
+                        {% if dstat.emp_avg_sal %}
+                            {{ dstat.emp_avg_sal }}
+                        {% else %}
+                            <span class="fontclr_gray">-</span>
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <td colspan="4">No Departments created yet.</td>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

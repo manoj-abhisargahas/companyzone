@@ -1,0 +1,49 @@
+{% extends 'companyzone/non_logged_base.html' %}
+{% load static %}
+
+{% block title %}404 | Page Not Found{{ block.super }}{% endblock %}
+
+{% block internal_css %}
+<style>
+body {
+    overflow: auto;
+}
+.head-txt {
+    font-weight: 800;
+    font-size: 108px;
+    text-align: center;
+    margin-top: 50px;
+    color: #333;
+}
+.txt {
+    font-size: 48px;
+    text-align: center;
+    color: #aaa;
+}
+</style>
+{% endblock %}
+
+{% block heading %}
+<div class="center-logo">
+    <a class="brand-logo" href="{% url 'login_url' %}">
+        <img src="{% static 'images/companyzone-logo-horz.png' %}">
+    </a>
+</div>
+{% endblock %}
+
+{% block top_output %}
+    {% if form.non_field_errors %}
+        <div class="output" >
+            <div class="body error" id="output-body">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block input_form %}
+<div class="head-txt">404</div>
+<div class="txt">Page Not Found.</div>
+{% endblock %}

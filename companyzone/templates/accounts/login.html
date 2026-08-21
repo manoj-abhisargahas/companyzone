@@ -1,0 +1,62 @@
+{% extends 'companyzone/non_logged_base.html' %}
+{% load static %}
+
+{% block title %}Login{{ block.super }}{% endblock %}
+
+{% block internal_css %}
+<style>
+body {
+    overflow: auto;
+}
+.main {
+    max-width: 470px;
+    margin: 0 auto;
+}
+.main .page-head {
+    justify-content: center;
+    text-align: center;
+}
+#output-body {
+    text-align: center;
+}
+</style>
+{% endblock %}
+
+{% block heading %}
+<div class="center-logo">
+    <a class="brand-logo" href="{% url 'dashboard_url' %}">
+        <img src="{% static 'images/companyzone-logo-horz.png' %}">
+    </a>
+</div>
+<div class="page-head">
+    <h1>Login</h1>
+</div>
+{% endblock %}
+
+{% block top_output %}
+    {% if form.non_field_errors %}
+        <div class="output" >
+            <div class="body error" id="output-body">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block input_form %}
+<div class="content_scroll">
+    <form action="" method="POST" 
+        class="elev_box_mdl">
+        {% csrf_token %}
+        {% for field in form %}
+            <p>
+                {{ field.label_tag }}<br>
+                {{ field }}
+            </p>
+        {% endfor %}
+        <input type="submit" class="btn-st1 dark w100p wspace lfont" value="Login" name="submit">
+    </form>
+</div>
+{% endblock %}

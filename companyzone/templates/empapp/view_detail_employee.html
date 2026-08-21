@@ -1,0 +1,111 @@
+{% extends 'companyzone/logged_base.html' %}
+{% load static %}
+
+{% block title %}View Detailed Employee{{ block.super }}{% endblock %}
+
+{% block internal_css %}
+<style>
+form a[class|='btn'] {
+    margin-top: 10px;
+}
+</style>
+{% endblock %}
+
+{% block mi-2 %}active{% endblock %}
+
+{% block heading %}
+<div class="page-head">
+    <h1>Employee - <span class="ename">{{ eobj.ename }}</span></h1>
+</div>
+{% endblock %}
+
+{% block top_output %}
+{% include 'companyzone/output.html' %}
+{% endblock %}
+
+{% block input_form %}
+<div class="content_scroll">
+    <div class="elev_box_mdl w540px">
+        <table>
+            <tr>
+                <td><label for="emp_no">Employee No:</label></td>
+                <td>
+                    <input type="text" disabled id="emp_no" value="{{ eobj.eno }}">
+                </td>
+            </tr>
+            <tr>
+                <td><label for="emp_name">Employee Name:</label></td>
+                <td><input type="text" disabled name="emp_name" id="emp_name" value="{{ eobj.ename }}" required maxlength="30"></td>
+            </tr>
+            <tr>
+                <td><label for="emp_sal">Employee Salary:</label></td>
+                <td><input type="text" disabled name="emp_sal" id="emp_sal" value="{{ eobj.esal }}" required></td>
+            </tr>
+            <tr>
+                <td><label for="emp_pfpic">Profile Pic:</label></td>
+                <td>
+                    {% if eobj.epfpic %}
+                        <a href='{{eobj.epfpic.url}}' target="_blank" class="media-img br4">
+                            <img src='{{ eobj.epfpic.url }}' class="pfpic">
+                        </a>
+                    {% else %}
+                        <span class="fontclr_gray">-</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><label for="emp_intvid">Interview Video:</label></td>
+                <td>
+                    {% if eobj.eintvid %}
+                        <a href='{{eobj.eintvid.url}}' target="_blank" class="media-vid">
+                            <video width="auto" height="60px" class="intvid">
+                                <source src="{{ eobj.eintvid.url }}" type="video/mp4">
+                            </video>
+                        </a>
+                    {% else %}
+                        <span class="fontclr_gray">-</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><label for="emp_resume">Resume:</label></td>
+                <td>
+                    {% if eobj.eresume %}
+                        <a href='{{eobj.eresume.url}}' target="_blank" class="resume-icon">
+                            <img src="{% static 'images/resume-icon.png' %}">
+                        </a>
+                    {% else %}
+                        <span class="fontclr_gray">-</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><label for="emp_dept">Department:</label></td>
+                <td><input type="text" disabled name="emp_dept" id="emp_dept" 
+                    {% if eobj.edept %}
+                        value="{{ eobj.edept.dept_name }}"
+                    {% else %}
+                        value="-"
+                    {% endif %} 
+                    required maxlength="30"></td>
+            </tr>
+            <tr>
+                <td><label for="emp_loc">Location:</label></td>
+                <td><input type="text" disabled name="emp_loc" id="emp_loc" 
+                    {% if eobj.eloc %}
+                        value="{{ eobj.eloc.loc_name }}"
+                    {% else %}
+                        value="-"
+                    {% endif %} 
+                    required maxlength="30"></td>
+            </tr>
+        </table>
+        <a href="{% url 'updateemployee_url' emp_no=eobj.eno %}" class="btn-st1 dark w100p wspace lfont mtop20px">Edit Employee</a>
+        <a href="{% url 'viewemployees_url'%}" class="btn-st1 light w100p wspace lfont">Back</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block addtl_js_script %}
+<script src="{% static 'empapp/js/form_script.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'companyzone/logged_base.html' %}
+{% load static %}
+
+{% block title %}Login{{ block.super }}{% endblock %}
+
+{% block top_addtl_js_script %}
+    <!-- Import Google's Model Viewer Component -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.3.1/model-viewer.min.js"></script>
+{% endblock %}
+
+{% block internal_css %}
+<style>
+    body {
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f3f4f6;
+        margin: 0;
+        overflow: auto;
+    }
+    .main .page-head {
+        justify-content: center;
+        text-align: center;
+    }
+    .product-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        text-align: center;
+        margin: 0 20px;
+    }
+    /* Style the 3D canvas window */
+    model-viewer {
+        width: 350px;
+        height: 350px;
+        background-color: #fafafa;
+        border-radius: 8px;
+        margin: 0 auto;
+    }
+</style>
+{% endblock %}
+
+{% block mi-4 %}active{% endblock %}
+
+{% block heading %}
+<div class="page-head">
+    <h1>3D Product Test</h1>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="product-card">
+    <!-- The 3D element handles like a normal image tag -->
+    <model-viewer 
+        src="{% static 'images/3d_lady_model-2.glb' %}" 
+        alt="My KIRI Engine 3D Lady Toy Scan Scan" 
+        auto-rotate 
+        camera-controls 
+        ar>
+    </model-viewer>
+    <h2>3D Lady Toy</h2>
+    <p>Interact to view in different dimensions.</p>
+</div>
+{% endblock %}

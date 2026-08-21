@@ -1,0 +1,5 @@
+PDF.js is a Portable Document Format (PDF) library that is built with HTML5. 
+Our goal is to create a general-purpose, web standards-based platform for parsing and rendering PDFs.
+
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";

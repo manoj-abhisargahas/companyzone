@@ -1,0 +1,122 @@
+{% extends 'companyzone/logged_base.html' %}
+{% load static %}
+
+{% block title %}Employees List{{ block.super }}{% endblock %}
+
+{% block internal_css %}
+<style>
+</style>
+{% endblock %}
+
+{% block mi-2 %}active{% endblock %}
+
+{% block heading %}
+<div class="page-head">
+    <h1>Employees List</h1>
+    {% if user.is_superuser %}
+    <a class="btn-st1 dark wspace lfont" href="{% url 'newemployee_url' %}">
+        <img src="{% static 'images/plus-icon.png' %}" class="btn-icon">
+        New Employee
+    </a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block top_output %}
+{% include 'companyzone/output_msg.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="content_scroll">
+    <table class="elev_box_mdl">
+        <thead>
+            <tr>
+                <th>Pic</th>
+                <th class="fit">ENo.</th>
+                <th>Employee Name</th>
+                {% if user.is_superuser %}
+                <th class="fit">Salary</th>
+                <th class="fit align_c" colspan="3">Actions</th>
+                {% endif %}
+                <th class="fit">Department</th>
+                <th class="fit">Location</th>
+                {% if user.is_superuser %}
+                <th class="fit">Interview Video</th>
+                <th class="fit">Resume</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for emp_obj in eobjs %}
+                <tr>
+                    <td class="pad6 fit align_c">
+                        {% if emp_obj.epfpic %}
+                            <div class="media-img center br4"
+                                onclick="dmfs_pfpic('{{ emp_obj.epfpic.url }}', '{{ emp_obj.ename }}')">
+                                <img src='{{ emp_obj.epfpic.url }}' class="pfpic">
+                            </div>
+                        {% else %}
+                            <span class="fontclr_gray">-</span>
+                        {% endif %}
+                    </td>
+                    <td class="fit max_w300 align_r">{{ emp_obj.eno }}</td>
+                    <td><a class="onclick_name"
+                        href="{% url 'viewdetailemployee_url' emp_no=emp_obj.eno %}">{{ emp_obj.ename }}</a>
+                    </td>
+                    {% if user.is_superuser %}
+                    <td class="align_r max_w500">{{ emp_obj.esal }}</td>
+                    {% endif %}
+                    <td class="btn"><a class="btn-st1 dark" 
+                        href="{% url 'viewdetailemployee_url' emp_no=emp_obj.eno %}">View</a>
+                    </td>
+                    {% if user.is_superuser %}
+                    <td class="btn"><a class="btn-st1 dark" 
+                        href="{% url 'updateemployee_url' emp_no=emp_obj.eno %}">Edit</a>
+                    </td>
+                    <td class="btn"><a class="btn-st1 light" 
+                        href="http://127.0.0.1:8000/emp/delete/?emp_no={{ emp_obj.eno }}" 
+                        onclick="return confirm('{{ emp_obj.eno }}. {{ emp_obj.ename }} - Sure to delete?')">Delete</a>
+                    </td>
+                    {% endif %}
+                    <td class="max_w500">{% if emp_obj.edept %}
+                            {{ emp_obj.edept.dept_name }}
+                        {% else %}
+                            <span class="fontclr_gray">-</span>
+                        {% endif %}
+                    </td>
+                    <td class="max_w500">{% if emp_obj.eloc %}
+                            {{ emp_obj.eloc.loc_name }}
+                        {% else %}
+                            <span class="fontclr_gray">-</span>
+                        {% endif %}
+                    </td>
+                    {% if user.is_superuser %}
+                    <td class="pad6 fit align_c">
+                        {% if emp_obj.eintvid %}
+                            <div class="media-vid center"
+                                onclick="dmfs_intvid('{{ emp_obj.eintvid.url }}', '{{ emp_obj.ename }}')">
+                                <video class="intvid" src="{{ emp_obj.eintvid.url }}"></video>
+                            </div>
+                        {% else %}
+                            <span class="fontclr_gray">-</span>
+                        {% endif %}
+                    </td>
+                    <td class="pad6 fit align_c">
+                        {% if emp_obj.eresume %}
+                            <div class="media-pdf center resume-icon"
+                                onclick="dmfs_resume('{{ emp_obj.eresume.url }}', '{{ emp_obj.ename }}')">
+                                <img src="{% static 'images/resume-icon.png' %}">
+                            </div>
+                        {% else %}
+                            <span class="fontclr_gray">-</span>
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <td colspan="4">No Employee details are there, <a href="{% url 'newemployee_url' %}">Add here</a></td>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

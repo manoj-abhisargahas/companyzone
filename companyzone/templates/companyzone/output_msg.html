@@ -1,0 +1,6 @@
+<div class="output" >
+    {% for msg in messages|slice:1 %}
+        <div class="body {{ msg.tags }}" id="output-body">{{ msg }}</div>
+    {% endfor %}
+    <!-- <p style="display: none">Messages Checklist: {{ messages|length }} found</p> -->
+</div>
