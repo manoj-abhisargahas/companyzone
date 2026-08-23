@@ -59,13 +59,13 @@ INTERNAL_IPS = [
 FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173')
 # Vite fallback local path
 
-if os.getenv('DEBUG', 'True')=='True':
+if DEBUG:
     # While developing at home, allow any source to connect for easy debugging
     CORS_ALLOW_ALL_ORIGINS = True
 else:
     # On your live Render server, lock the gates!
     # Only allow connection requests coming directly from your official Vercel shop URL
-    CORS_ALLOW_ALL_ORIGINS = False # Only Testing
+    CORS_ALLOW_ALL_ORIGINS = False
     CORS_ALLOWED_ORIGINS = [    # Use in Production
         FRONTEND_URL,
         'http://127.0.0.1:5173', # Vite fallback local path
@@ -210,16 +210,29 @@ WSGI_APPLICATION = 'companyzone.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 # ==========================================================================
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
+
+if not DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('DB_NAME'),
+            'USER': os.getenv('DB_USER'),
+            'PASSWORD': os.getenv('DB_PASSWORD'),
+            'HOST': os.getenv('DB_HOST'),
+            'PORT': os.getenv('DB_PORT'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('LOCAL_DB_NAME'),
+            'USER': os.getenv('LOCAL_DB_USER'),
+            'PASSWORD': os.getenv('LOCAL_DB_PASSWORD'),
+            'HOST': os.getenv('LOCAL_DB_HOST'),
+            'PORT': os.getenv('LOCAL_DB_PORT'),
+        }
+    }
 
 
 
@@ -282,23 +295,27 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # ==========================================================================
 # PRODUCTION MEDIA STORAGE CONFIGURATION (CLOUDINARY)
 # ==========================================================================
-# Tell Django to route user files, docs, and videos directly to Cloudinary
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-# Pull your secret keys securely from your hidden .env file
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME':os.getenv('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY':os.getenv('CLOUDINARY_API_KEY'),
-    'API_SECRET':os.getenv('CLOUDINARY_API_SECRET')
-}
+if not DEBUG:
+    # Tell Django to route user files, docs, and videos directly to Cloudinary
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    # Pull your secret keys securely from your hidden .env file
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME':os.getenv('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY':os.getenv('CLOUDINARY_API_KEY'),
+        'API_SECRET':os.getenv('CLOUDINARY_API_SECRET')
+    }
 
 # The web URL prefix for media files
-MEDIA_URL = 'media/' #you can give any name to just display in frontend
+MEDIA_URL = '/media/' #you can give any name to just display in frontend
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 
 # ==========================================================================
-ADMIN_PATH = os.getenv('ADMIN_PATH', 'admin/') # If missing, it defaults to standard admin/
+if not DEBUG:
+    ADMIN_PATH = os.getenv('ADMIN_PATH', 'admin/') # If missing, it defaults to standard admin/
+else:
+    ADMIN_PATH = os.getenv('LOCAL_ADMIN_PATH', 'admin/')
 AUTH_USER_MODEL = 'accounts.AppUser' # Format: 'your_app_name.ModelClassName'
 # Tell Django where your login page path lives for automated route blocking
 LOGIN_URL = 'login_url'
@@ -308,7 +325,8 @@ LOGIN_REDIRECT_URL = 'dashboard_url'
 # LOGOUT_REDIRECT_URL = 'login_url'
 
 
-# gunicorn is not required to run your project on your local computer.
+# ==========================================================================
+# gunicorn server not required to run your project on your local computer.
 # Gunicorn (short for "Green Unicorn") is a production-ready web application server used to run Python websites like Django or Flask on the internet
 # Think of it as a powerhouse translator and manager for your website when it is live.
 # 1. The Intermediary (The "Translator")
