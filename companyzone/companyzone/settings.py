@@ -77,22 +77,24 @@ else:
 # Application definition
 # ==========================================================================
 INSTALLED_APPS = [
-    'cloudinary',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Cloud Storage Engines (Add these lines)
+    'cloudinary_storage',
+    'cloudinary',
+
     'empapp',
     'accounts',
     'debug_toolbar',
     'api',
     'rest_framework',
-    # Cloud Storage Engines (Add these lines)
-    'cloudinary_storage',
     'corsheaders',
-    
 ]
 
 
@@ -289,7 +291,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Dedicated collection folder
 
 # 4. Turn on WhiteNoise's high-speed compression engine
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# # Depricated instead see this setting: STORAGES array
 
 
 
@@ -298,7 +301,18 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # ==========================================================================
 if not DEBUG:
     # Tell Django to route user files, docs, and videos directly to Cloudinary
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    # DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage' #Deprecated
+    # 🚀 OFFICIAL DJANGO 6.0 STORAGES MAP
+    STORAGES = {
+         # 📸 Handled completely by Cloudinary for User Image/Video/Docs Uploads
+        'default':{
+            'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage'
+        },
+        # 🎨 Handled completely by WhiteNoise locally from Render's disk for staticfiles
+        'staticfiles':{
+            'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage'
+        }
+    }
     # Pull your secret keys securely from your hidden .env file
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME':os.getenv('CLOUDINARY_CLOUD_NAME'),
