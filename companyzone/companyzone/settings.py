@@ -22,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 
-# Quick-start development settings - unsuitable for production
+# Quick-start development settings - unsuitable for production (But now changed according to production)
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# SECURITY WARNING: keep the secret key used in production as secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 
@@ -142,7 +142,8 @@ LOGGING = {
         # This catches all the log entries across your entire Django application
         # The empty string means "Global Root Logger" (catches everything)
         '': {
-            'handlers': ['console', 'file'],
+            # 'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': 'INFO',
         },
     },
