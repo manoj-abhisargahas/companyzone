@@ -77,9 +77,7 @@ else:
 # Application definition
 # ==========================================================================
 INSTALLED_APPS = [
-    # Cloud Storage Engines (Add these lines)
-    'cloudinary_storage',
-    
+    'cloudinary',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -91,8 +89,10 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'api',
     'rest_framework',
+    # Cloud Storage Engines (Add these lines)
+    'cloudinary_storage',
     'corsheaders',
-    'cloudinary',
+    
 ]
 
 
