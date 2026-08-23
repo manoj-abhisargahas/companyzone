@@ -79,8 +79,7 @@ else:
 INSTALLED_APPS = [
     # Cloud Storage Engines (Add these lines)
     'cloudinary_storage',
-    'cloudinary',
-
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -93,6 +92,7 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'corsheaders',
+    'cloudinary',
 ]
 
 
