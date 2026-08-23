@@ -22,16 +22,18 @@ from django.conf import settings
 from accounts import views as acc_views
 from django.views.generic import TemplateView
 
+
 urlpatterns = [
     # AVOID THIS IN PRODUCTION:
-    path('admin/', admin.site.urls),
-    # PRODUCTION PRACTICE: Use a secure, secret custom path string
-    # path('cz-manager-portal-99/', admin.site.urls), 
+    # path('admin/', admin.site.urls),
+    # PRODUCTION PRACTICE: Use a secure, secret custom path string - environment variable
+    path(settings.ADMIN_PATH, admin.site.urls), 
     
     path('emp/', include('empapp.urls')),
     path('accounts/', include('accounts.urls')),
 
     # Your app's landing page
+    path('', acc_views.dashboard),
     path('dashboard/', acc_views.dashboard, name='dashboard_url'),
 
     path('3dmodeltest/', TemplateView.as_view(template_name='3d_model_view.html'), name='3dmodeltest_url'),
@@ -39,24 +41,41 @@ urlpatterns = [
     path('api/', include('api.urls'))
 ]
 
-# FORCED TEMPORARY MEDIA SERVING ON PRODUCTION (Ignores DEBUG = False)
-if settings.MEDIA_URL and settings.MEDIA_ROOT:
-    # serve view
-    from django.views.static import serve
-    from django.urls import re_path
 
-    urlpatterns += [
-        re_path(r'^%s(?P<path>.*)$' % settings.MEDIA_URL.lstrip('/'), serve, {
-            'document_root': settings.MEDIA_ROOT,
-        }),
-    ]
-
-# Debug toolbar only works on DEBUG = True
 if settings.DEBUG:
     from django.conf.urls.static import static
     import debug_toolbar
-    
-    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+
+    # To make Debug toolbar only works on DEBUG=True
     urlpatterns += [
         path('__debug__/', include(debug_toolbar.urls))
     ]
+
+    # Standard Media Setup:
+    # static() helper function is programmed to only work when DEBUG=True. 
+    # The moment you flip DEBUG = False to run your production test, the static() helper completely turns off and returns nothing.
+    # Serves user uploaded jewelry media files locally on your laptop
+    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+
+
+# FORCED TEMPORARY MEDIA SERVING ON PRODUCTION (even if DEBUG = False/True)
+# -------------------------------------------------------------------------
+# if settings.MEDIA_URL and settings.MEDIA_ROOT:
+#     # serve view
+#     from django.views.static import serve
+#     from django.urls import re_path
+
+#     urlpatterns += [
+#         re_path(r'^%s(?P<path>.*)$' % settings.MEDIA_URL.lstrip('/'), serve, {
+#             'document_root': settings.MEDIA_ROOT,
+#         }),
+#     ]
+
+# by default, Django's built-in static() function refuses to serve media files 
+# when DEBUG = False (production mode).
+# so even if you use "urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)"
+# in production iut will not serves files
+
+# Django is intentionally built that way because it is a Python web framework, 
+# not a high-speed file storage server. In a corporate environment, 
+# letting Django process raw media files can clog the system and slow down performance.

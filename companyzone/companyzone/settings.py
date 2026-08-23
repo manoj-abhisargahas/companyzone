@@ -12,19 +12,28 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from pickle import TRUE
+import os
+from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths inside the project like this: BASE_DIR / 'subdir' or os.path.join(BASE_DIR, 'subdir')
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load the environment variables from the .env file
+# This tells Python to look exactly in the folder where manage.py lives
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+ADMIN_PATH = os.getenv('ADMIN_PATH', 'admin/') # If missing, it defaults to standard admin/
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%^)gyqv)l%@#!#nuu4gz!vrydflxp$+=mfz*j#8n)%2g+4yh1g'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# On your local computer, this will be True. On Render, we can turn it off safely.
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 # ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 ALLOWED_HOSTS = ['*']
@@ -82,7 +91,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'django_performance.log',
+            'filename': os.path.join(BASE_DIR, 'django_performance.log'),
             'formatter': 'verbose',
         },
         # Configuration to keep displaying logs in your terminal
@@ -108,6 +117,7 @@ MIDDLEWARE = [
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -132,7 +142,7 @@ ROOT_URLCONF = 'companyzone.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': os.path.join(BASE_DIR, 'templates'),
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -153,11 +163,11 @@ WSGI_APPLICATION = 'companyzone.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'compzone_db',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
@@ -195,12 +205,17 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
+# The web URL prefix for static files
+STATIC_URL = 'static/' #you can give any name to just display in frontend
+# The directory where Django will collect all static files for production
+STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
+# Turn on WhiteNoise's high-speed compression engine
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# The web URL prefix for media files
+MEDIA_URL = 'media/' #you can give any name to just display in frontend
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media'),
 
 
 AUTH_USER_MODEL = 'accounts.AppUser' # Format: 'your_app_name.ModelClassName'

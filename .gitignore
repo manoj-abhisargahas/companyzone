@@ -14,3 +14,6 @@ django_performance.log
 # Ignore Python cache files
 **/__pycache__/
 *.pyc
+
+# Most Crucial DevSecOps Step!: Hide environment variables From GitHub
+companyzone/.env

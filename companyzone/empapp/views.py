@@ -115,7 +115,9 @@ class EmployeeInsertView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
         return render(request, filename, context)
 
+#Authentication
 @login_required # Bounces users back to login page if they lack an active session
+#Authorization - 'empapp.view_employee' getting this built-in permission from 'Employee' model class
 @permission_required('empapp.view_employee', raise_exception=True)
 def viewEmployees(request):
     res_filename = 'empapp/view_all_employees.html'
@@ -126,6 +128,7 @@ def viewEmployees(request):
         return render(request, res_filename, context)
 
 @login_required
+#Authorization - 'empapp.view_detail_employee' Created this custom permission in 'Employee' model class
 @permission_required('empapp.view_detail_employee', raise_exception=True)
 def viewDetailEmployee(request, emp_no):
     eobj = get_object_or_404(Employee, eno=emp_no)
