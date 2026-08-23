@@ -74,7 +74,7 @@
                         href="{% url 'updateemployee_url' emp_no=emp_obj.eno %}">Edit</a>
                     </td>
                     <td class="btn"><a class="btn-st1 light" 
-                        href="http://127.0.0.1:8000/emp/delete/?emp_no={{ emp_obj.eno }}" 
+                        href="{% url 'deleteemployee_url' emp_no=emp_obj.eno %}" 
                         onclick="return confirm('{{ emp_obj.eno }}. {{ emp_obj.ename }} - Sure to delete?')">Delete</a>
                     </td>
                     {% endif %}
