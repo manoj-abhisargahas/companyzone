@@ -189,7 +189,7 @@ ROOT_URLCONF = 'companyzone.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': os.path.join(BASE_DIR, 'templates'),
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -306,3 +306,12 @@ LOGIN_URL = 'login_url'
 LOGIN_REDIRECT_URL = 'dashboard_url'
 # This will override django admin app logout also so no need to use.
 # LOGOUT_REDIRECT_URL = 'login_url'
+
+
+# gunicorn is not required to run your project on your local computer.
+# Gunicorn (short for "Green Unicorn") is a production-ready web application server used to run Python websites like Django or Flask on the internet
+# Think of it as a powerhouse translator and manager for your website when it is live.
+# 1. The Intermediary (The "Translator")
+# 2. Handling Multiple Users at Once (Concurrency)
+# 3. Stability and Crash Protection
+# On your own computer, you usually use Django's built-in development server by running python manage.py runserver.
