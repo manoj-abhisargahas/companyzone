@@ -69,7 +69,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     # Cloud Storage Engines (Add these lines)
-    'cloudinary',
+    'cloudinary_storage',
     'cloudinary',
 ]
 
