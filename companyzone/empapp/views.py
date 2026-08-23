@@ -194,9 +194,11 @@ def updateEmployee(request, emp_no):
         else:
             # 4. This block ONLY runs if the try block finishes with ZERO errors.
             # Deleting files in MEDIA_ROOT if it exits:
-            if old_pfpic and old_pfpic.name and os.path.isfile(old_pfpic.path): os.remove(old_pfpic.path)
-            if old_intvid and old_intvid.name and os.path.isfile(old_intvid.path): os.remove(old_intvid.path)
-            if old_resume and old_resume.name and os.path.isfile(old_resume.path): os.remove(old_resume.path)
+            # using old_pfpic.delete(save=False) instead of ".. and os.path.isfile(old_pfpic.path): os.remove(old_pfpic.path)"
+            # Delete the physical file from storage without updating the database row
+            if old_pfpic and old_pfpic.name: old_pfpic.delete(save=False)
+            if old_intvid and old_intvid.name: old_intvid.delete(save=False)
+            if old_resume and old_resume.name: old_resume.delete(save=False)
 
             result = f"Employee No. ({emp_no}) Updated Successfully!"
             result_type = 'success'
@@ -243,9 +245,9 @@ def deleteEmployee(request):
         else:
             # 3. This block ONLY runs if the try block finishes with ZERO errors.
             # Deleting files in MEDIA_ROOT if it exits:
-            if old_pfpic and old_pfpic.name and os.path.isfile(old_pfpic.path): os.remove(old_pfpic.path)
-            if old_intvid and old_intvid.name and os.path.isfile(old_intvid.path): os.remove(old_intvid.path)
-            if old_resume and old_resume.name and os.path.isfile(old_resume.path): os.remove(old_resume.path)
+            if old_pfpic and old_pfpic.name: old_pfpic.delete(save=False)
+            if old_intvid and old_intvid.name: old_intvid.delete(save=False)
+            if old_resume and old_resume.name: old_resume.delete(save=False)
 
             result = f"{emp_no}. {emp_name} - Employee Deleted Successfully!"
             result_type = 'success'
