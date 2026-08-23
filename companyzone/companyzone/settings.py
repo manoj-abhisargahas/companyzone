@@ -68,6 +68,9 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'corsheaders',
+    # Cloud Storage Engines (Add these lines)
+    'cloudinary',
+    'cloudinary',
 ]
 
 # Default: Simple setups, persistence, and data consistency.
@@ -213,9 +216,19 @@ STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
+# PRODUCTION MEDIA STORAGE CONFIGURATION (CLOUDINARY)
+# Tell Django to route user files, docs, and videos directly to Cloudinary
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# Pull your secret keys securely from your hidden .env file
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME':os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY':os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET':os.getenv('CLOUDINARY_API_SECRET')
+}
+
 # The web URL prefix for media files
 MEDIA_URL = 'media/' #you can give any name to just display in frontend
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media'),
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 AUTH_USER_MODEL = 'accounts.AppUser' # Format: 'your_app_name.ModelClassName'
