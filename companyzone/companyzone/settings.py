@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-from pickle import TRUE
 import os
 from dotenv import load_dotenv
 
@@ -22,8 +21,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # This tells Python to look exactly in the folder where manage.py lives
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
-ADMIN_PATH = os.getenv('ADMIN_PATH', 'admin/') # If missing, it defaults to standard admin/
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -31,13 +28,13 @@ ADMIN_PATH = os.getenv('ADMIN_PATH', 'admin/') # If missing, it defaults to stan
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 # On your local computer, this will be True. On Render, we can turn it off safely.
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 # ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 ALLOWED_HOSTS = ['*']
-
 
 # INTERNAL_IPS is to identify safe, local developers 
 # so the server can give them special debugging powers without exposing secrets to the public web.
@@ -54,7 +51,31 @@ INTERNAL_IPS = [
 ]
 
 
+
+# ==========================================================================
+# CORS Settings - Cross-Origin Resource Sharing
+# ==========================================================================
+# If running locally, it defaults to your standard Vite/React server origins
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173')
+# Vite fallback local path
+
+if os.getenv('DEBUG', 'True')=='True':
+    # While developing at home, allow any source to connect for easy debugging
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    # On your live Render server, lock the gates!
+    # Only allow connection requests coming directly from your official Vercel shop URL
+    CORS_ALLOW_ALL_ORIGINS = False # Only Testing
+    CORS_ALLOWED_ORIGINS = [    # Use in Production
+        FRONTEND_URL,
+        'http://127.0.0.1:5173', # Vite fallback local path
+    ]
+
+
+
+# ==========================================================================
 # Application definition
+# ==========================================================================
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -73,6 +94,11 @@ INSTALLED_APPS = [
     'cloudinary',
 ]
 
+
+
+# ==========================================================================
+# Session Settings
+# ==========================================================================
 # Default: Simple setups, persistence, and data consistency.
 SESSION_ENGINE  = 'django.contrib.sessions.backends.db'
 # Simple, local environments without a structured database.
@@ -80,6 +106,11 @@ SESSION_ENGINE  = 'django.contrib.sessions.backends.db'
 # Storing session data directly on the client browser securely.
 # SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
+
+
+# ==========================================================================
+# Logging
+# ==========================================================================
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -91,16 +122,19 @@ LOGGING = {
     },
     'handlers': {
         # Configuration to write logs directly into a file
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'django_performance.log'),
-            'formatter': 'verbose',
-        },
+        # on free-tier of clouds likle Render we don't have this permission
+        # 'file': {
+        #     'level': 'INFO',
+        #     'class': 'logging.FileHandler',
+        #     'filename': os.path.join(BASE_DIR, 'django_performance.log'),
+        #     'formatter': 'verbose',
+        # },
+
+        # Production-Grade Cloud Logging (Streaming logs directly to the Render terminal)
         # Configuration to keep displaying logs in your terminal
         'console': {
             'level': 'INFO',
-            'class': 'logging.StreamHandler',
+            'class': 'logging.StreamHandler', # Streams safely directly to the terminal logs screen
             'formatter': 'verbose',
         },
     },
@@ -114,6 +148,11 @@ LOGGING = {
     },
 }
 
+
+
+# ==========================================================================
+# Middlewares
+# ==========================================================================
 MIDDLEWARE = [
     # Custom Middlewares
     'companyzone.middleware.ReqResTimeLoggingMiddleware',
@@ -134,14 +173,18 @@ MIDDLEWARE = [
     # 'companyzone.middleware.LoginRequiredMiddleware'
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True # Only Testing
-# CORS_ALLOWED_ORIGINS = [    # Use in Production
-#     'http://localhost:5173',
-# ]
 
 
+# ==========================================================================
+# URL Configuration
+# ==========================================================================
 ROOT_URLCONF = 'companyzone.urls'
 
+
+
+# ==========================================================================
+# Templates settings
+# ==========================================================================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -160,8 +203,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'companyzone.wsgi.application'
 
 
+
+# ==========================================================================
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+# ==========================================================================
 
 DATABASES = {
     'default': {
@@ -175,8 +221,11 @@ DATABASES = {
 }
 
 
+
+# ==========================================================================
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
+# ==========================================================================
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -194,7 +243,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
+# ==========================================================================
 # Internationalization
+# ==========================================================================
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
@@ -206,17 +258,29 @@ USE_I18N = True
 USE_TZ = True
 
 
+
+# ==========================================================================
 # Static files (CSS, JavaScript, Images)
+# ==========================================================================
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
-# The web URL prefix for static files
+# 1. The web URL prefix for static files
 STATIC_URL = 'static/' #you can give any name to just display in frontend
-# The directory where Django will collect all static files for production
-STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
-# Turn on WhiteNoise's high-speed compression engine
+# 2. Where Django looks for raw files during development and 
+# tell production server from where it has to collect
+STATICFILES_DIRS = os.path.join(BASE_DIR, 'static')
+
+# 3. tells WhiteNoise exactly where to gather and compress all those files into 
+# one single folder when your app goes live on Render/any cloud app.
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Dedicated collection folder
+
+# 4. Turn on WhiteNoise's high-speed compression engine
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
+
+# ==========================================================================
 # PRODUCTION MEDIA STORAGE CONFIGURATION (CLOUDINARY)
+# ==========================================================================
 # Tell Django to route user files, docs, and videos directly to Cloudinary
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # Pull your secret keys securely from your hidden .env file
@@ -231,6 +295,9 @@ MEDIA_URL = 'media/' #you can give any name to just display in frontend
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+
+# ==========================================================================
+ADMIN_PATH = os.getenv('ADMIN_PATH', 'admin/') # If missing, it defaults to standard admin/
 AUTH_USER_MODEL = 'accounts.AppUser' # Format: 'your_app_name.ModelClassName'
 # Tell Django where your login page path lives for automated route blocking
 LOGIN_URL = 'login_url'
