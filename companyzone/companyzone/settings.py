@@ -268,7 +268,7 @@ USE_TZ = True
 STATIC_URL = 'static/' #you can give any name to just display in frontend
 # 2. Where Django looks for raw files during development and 
 # tell production server from where it has to collect
-STATICFILES_DIRS = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 
 # 3. tells WhiteNoise exactly where to gather and compress all those files into 
 # one single folder when your app goes live on Render/any cloud app.
