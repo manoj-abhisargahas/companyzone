@@ -304,9 +304,17 @@ if not DEBUG:
     # DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage' #Deprecated
     # 🚀 OFFICIAL DJANGO 6.0 STORAGES MAP
     STORAGES = {
-         # 📸 Handled completely by Cloudinary for User Image/Video/Docs Uploads
+         # 1. This handles your profile pictures (Images)
         'default':{
             'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage'
+        },
+        # 2. Add this to handle your interview videos (Videos)
+        'videos':{
+            'BACKEND': 'cloudinary_storage.storage.VideoMediaCloudinaryStorage'
+        },
+        # 3. Add this to handle your resumes (PDFs/Docs)
+        'raw':{
+            'BACKEND': 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
         },
         # 🎨 Handled completely by WhiteNoise locally from Render's disk for staticfiles
         'staticfiles':{
@@ -317,7 +325,13 @@ if not DEBUG:
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME':os.getenv('CLOUDINARY_CLOUD_NAME'),
         'API_KEY':os.getenv('CLOUDINARY_API_KEY'),
-        'API_SECRET':os.getenv('CLOUDINARY_API_SECRET')
+        'API_SECRET':os.getenv('CLOUDINARY_API_SECRET'),
+
+        # To force video field paths to override the image rule: - NO NEED if mentioned inside STORAGES
+        # 'RESOURCE_TYPES': {
+        #     'interview_vids': 'video',
+        #     'resumes': 'raw',
+        # }
     }
 
 # The web URL prefix for media files

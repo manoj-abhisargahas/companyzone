@@ -86,7 +86,7 @@ class EmployeeInsertView(LoginRequiredMixin, PermissionRequiredMixin, View):
             result = f"Error: Employee No. ({emp_no}) already exists!"
             result_type = "error"
         except Exception as e:
-            result = f"Error: Employee No. ({emp_no}) deletion failed due to System Error, Try Again!"
+            result = f"Error: Employee No. ({emp_no}) insertion failed due to System Error, Try Again!. Message: {e}"
             result_type = "error"
         else:
             result = f"{emp_no}. {emp_name} - New Employee inserted Successfully!"
@@ -189,7 +189,7 @@ def updateEmployee(request, emp_no):
                 # 3. Commit to the database
                 eobj.save()
         except Exception as e:
-            result = f"Error: Employee No. ({emp_no}) deletion failed due to System Error, Try Again! {e}"
+            result = f"Error: Employee No. ({emp_no}) updation failed due to System Error, Try Again!. Message: {e}"
             result_type = "error"
         else:
             # 4. This block ONLY runs if the try block finishes with ZERO errors.
@@ -216,13 +216,12 @@ def updateEmployee_response(request, result, result_type):
 
 @login_required
 @permission_required('empapp.delete_employee', raise_exception=True)
-def deleteEmployee(request):
+def deleteEmployee(request, emp_no):
     if request.method == 'GET':
         result = ""
         result_type = ""
         query_set = request.GET
 
-        emp_no = int(query_set.get('emp_no', ""))
         try:
             eobj = Employee.objects.get(eno=emp_no) #Employee.DoesNotExist
 
@@ -240,7 +239,7 @@ def deleteEmployee(request):
             result = f"Error: Employee with No. ({emp_no}) doesn't exits!"
             result_type = 'error'
         except Exception as e:
-            result = f"Error: Employee No. ({emp_no}) deletion failed due to System Error, Try Again! {e}"
+            result = f"Error: Employee No. ({emp_no}) deletion failed due to System Error, Try Again!. Message: {e}"
             result_type = 'error'
         else:
             # 3. This block ONLY runs if the try block finishes with ZERO errors.

@@ -6,6 +6,6 @@ urlpatterns = [
     path('view/', views.viewEmployees, name='viewemployees_url'),
     path('view/<int:emp_no>/', views.viewDetailEmployee, name='viewdetailemployee_url'),
     path('update/<int:emp_no>/', views.updateEmployee, name='updateemployee_url'),
-    path('delete/<int:emp_no>', views.deleteEmployee, name='deleteemployee_url'),
+    path('delete/<int:emp_no>/', views.deleteEmployee, name='deleteemployee_url'),
     path('viewdeptstats/', views.viewDeptStats, name='viewdeptstats_url'),
 ]
