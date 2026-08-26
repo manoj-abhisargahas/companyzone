@@ -31,11 +31,28 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # On your local computer, this will be True. On Render, we can turn it off safely.
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-ALLOWED_HOSTS = ['*']
 
+
+# ==========================================================================
+# ALLOWED_HOSTS
+# ==========================================================================
+if DEBUG:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '*']
+    # Exposes your live Render app to HTTP Host Header attacks and unwanted traffic in production. SO
+else:
+    # Lock down production traffic to your official cloud (now, Render) deployment URL only
+    ALLOWED_HOSTS = [os.getenv('RENDER_EXTERNAL_HOSTNAME')]
+    # Note: Render automatically creates and updates the RENDER_EXTERNAL_HOSTNAME environment variable 
+    # for your live web service behind the scenes, 
+    # so you do not even have to type your exact link manually!
+
+
+
+# ==========================================================================
+# INTERNAL_IPS
+# ==========================================================================
 # INTERNAL_IPS is to identify safe, local developers 
 # so the server can give them special debugging powers without exposing secrets to the public web.
 # 1. Showing the Django Debug Toolbar
@@ -213,8 +230,12 @@ WSGI_APPLICATION = 'companyzone.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 # ==========================================================================
 
+# Check if GitHub Actions is running the CI pipeline
+IS_GITHUB_CI = os.getenv('TESTING', 'False') == 'True'
 
-if not DEBUG:
+if IS_GITHUB_CI or not DEBUG:
+    # 1. Pipeline Test Block (Runs only inside GitHub Actions)
+    # 2. Production Block (Runs live on Render connecting to Clever Cloud)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -226,6 +247,7 @@ if not DEBUG:
         }
     }
 else:
+    # 3. Development Block (Runs locally on your laptop using your dev variables)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
