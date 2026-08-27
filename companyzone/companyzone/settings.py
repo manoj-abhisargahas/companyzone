@@ -351,6 +351,21 @@ if not DEBUG:
         #     'resumes': 'raw',
         # }
     }
+else:
+    STORAGES = {
+        'default':{
+            'BACKEND': 'django.core.files.storage.FileSystemStorage'
+        },
+        'videos':{
+            'BACKEND': 'django.core.files.storage.FileSystemStorage'
+        },
+        'raw':{
+            'BACKEND': 'django.core.files.storage.FileSystemStorage'
+        },
+        'staticfiles':{
+            'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage'
+        }
+    }
 
 # The web URL prefix for media files
 MEDIA_URL = '/media/' #you can give any name to just display in frontend
