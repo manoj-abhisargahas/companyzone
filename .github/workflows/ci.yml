@@ -9,7 +9,6 @@ on:
 jobs:
   full-stack-test-pipeline:
     runs-on: ubuntu-latest
-    needs: lint
     # Tells the job to look inside your subfolder
     defaults:
       run:
