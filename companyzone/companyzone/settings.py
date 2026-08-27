@@ -230,12 +230,8 @@ WSGI_APPLICATION = 'companyzone.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 # ==========================================================================
 
-# Check if GitHub Actions is running the CI pipeline
-IS_GITHUB_CI = os.getenv('TESTING', 'False') == 'True'
-
-if IS_GITHUB_CI or not DEBUG:
-    # 1. Pipeline Test Block (Runs only inside GitHub Actions)
-    # 2. Production Block (Runs live on Render connecting to Clever Cloud)
+if not DEBUG:
+    # Production Block (Runs live on Render connecting to Clever Cloud)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -247,7 +243,7 @@ if IS_GITHUB_CI or not DEBUG:
         }
     }
 else:
-    # 3. Development Block (Runs locally on your laptop using your dev variables)
+    # Development Block (Runs locally on your laptop using your dev variables)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
