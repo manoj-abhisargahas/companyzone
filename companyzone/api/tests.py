@@ -42,7 +42,7 @@ class CompanyZoneAPITests(APITestCase):
             "username": self.username,
             "password": self.password
         }
-        response = self.client.post(url, data, format=json)
+        response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # SimpleJWT official output key checks
         self.seertIn('access', response.data)
