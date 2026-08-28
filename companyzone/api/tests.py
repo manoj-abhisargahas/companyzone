@@ -90,4 +90,4 @@ class CompanyZoneAPITests(APITestCase):
         # DefaultRouter appends '-detail' for resourse-specific path like entry modification
         url = reverse('modelviewset_emp_api_url-detail', kwargs={'pk':1})
         response = self.client.delete(url)
-        self.assaertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
