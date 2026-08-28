@@ -13,3 +13,13 @@ print(response.history)
 print(response.url)
 print(response.text)
 print(response.json)
+print(response.status_code)
+
+
+"""
+1. User Logs In  ──> [Send Password] ──> Django validates it
+2. Tokens Issued <── [Access & Refresh Tokens] <── Sent back to Frontend
+3. Read Data     ──> [Send Access Token] ──> Django returns Employee Table Data
+4. Token Expires ──> [Access Token Dead!] ──> Django returns 401 Unauthorized
+5. Silent Renew  ──> [Send Refresh Token] ──> Django returns New Access Token
+"""

@@ -1,3 +1,90 @@
 from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APITestCase
+from django.contrib.auth.models import User
 
 # Create your tests here.
+class CompanyZoneAPITests(APITestCase):
+    def setUp(self):
+        """Runs before every test to populate the MySQL Container with a user base."""
+        self.username = "testdeveloper"
+        self.password = "SecurePass123!"
+        self.email = "dev@companyzone.com"
+
+        # Create a test user in the temporary test database instance
+        self.test_user = User.objects.create_user(
+            username=self.username,
+            password=self.password,
+            email=self.email
+        )
+
+    # ==============================================================
+    # 🔓 AUTHENTICATION FREE ENDPOINT TESTS
+    # ==============================================================
+
+    def test_user_registration_endpoint(self):
+        """1. Verifies that a new user successfully register via the API"""
+        url = reverse('api_register_url')
+        data = {
+            "username": "newuserxyz",
+            "email": "newuser@companyzone.com",
+            "password": "NewSecurePassword567!"
+        }
+        response = self.client.post(url, data, format='json')
+        #Expect 201 Created or 200 OK depending on your Register view logic
+        self.assertIn(response.status_code, [status.HTTP_201_CREATED, status.HTTP_200_OK])
+
+    def test_user_login_return_jwt_tokens(self):
+        """2. Verifies that valid credentials return access and refresh JWT tokens"""
+        url = reverse('api_login_url')
+        data = {
+            "username": self.username,
+            "password": self.password
+        }
+        response = self.client.post(url, data, format=json)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # SimpleJWT official output key checks
+        self.seertIn('access', response.data)
+        self.seertIn('refresh', response.data)
+
+        """
+        1. User Logs In  ──> [Send Password] ──> Django validates it
+        2. Tokens Issued <── [Access & Refresh Tokens] <── Sent back to Frontend
+        3. Read Data     ──> [Send Access Token] ──> Django returns Employee Table Data
+        4. Token Expires ──> [Access Token Dead!] ──> Django returns 401 Unauthorized
+        5. Silent Renew  ──> [Send Refresh Token] ──> Django returns New Access Token
+        """
+
+    def test_new_employee_form_data_is_accessible(self):
+        """3. Verifies that the metadata form data endpoint can be fetched freely"""
+        url = reverse('new_emp_form_data_url')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTPS_200_OK)
+
+
+    # ==============================================================
+    # 🔓 LOGGED-IN / RESTRICTED ENDPOINT TESTS
+    # ==============================================================
+
+    def test_modify_employee_denies_anonymous_user(self):
+        """4. Verifies that updating an employee profile without a JWT token blocks access"""
+        # Hitting "Employee/<int:pk>/" with a primary key (1)
+        url = reverse('emp_modifyapi_url', kwargs={'pk':1})
+        data = {"firstname":"Ghost Update"}
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_router_viewswet_list_is_accessible(self):
+        """5. Verifies that the router base listing is open"""
+        # DefaultRouter appends '-list' to the basename for top-level collection requests
+        url = reverse('modelviewset_emp_api_url')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_router_viewswet_destroy_denies_anonymous_user(self):
+        """6. Verifies that deleting via ModelViewSet requires active authorization"""
+        # DefaultRouter appends '-detail' for resourse-specific path like entry modification
+        url = reverse('modelviewset_emp_api_url', kwargs={'pk':1})
+        response = self.client.delete(url)
+        self.assaertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

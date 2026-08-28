@@ -13,7 +13,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, DjangoModelPermissions
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, DjangoModelPermissions, AllowAny
 from .permissions import UserPermissionsChecker
 
 # Create your views here.
@@ -216,15 +216,30 @@ class CustomEmployeeModifyAPI(APIView):
 
 class ModelViewSetEmployeeAPI(ModelViewSet):
     authentication_classes = [JWTAuthentication]
+
+    # Remove the default global permission_classes attribute entirely.
+    # We will determine permissions dynamically below instead.
     # permission_classes = [IsAuthenticated, UserPermissionsChecker]
 
+    def get_permissions(self):
+        """
+        Dynamically instantiates and returns the list of permissions 
+        that this view requires based on the incoming action.
+        """
+        # 2. If the user is listing or retrieving, let anyone in
+        if self.action in ['list']:
+            return [AllowAny()]
+
+        # 3. For write actions, require both login AND the custom permission check
+        return [IsAuthenticated(), UserPermissionsChecker()]
+
     permissions_required_actions_map = {
-        'list': ['empapp.view_employee'],
+        # 'list': ['empapp.view_employee'],
         'retrieve': ['empapp.view_detail_employee'],
         'create': ['empapp.add_employee'],
         'update': ['empapp.change_employee'],
         'partial_update': ['empapp.change_employee'],
-        'delete': ['empapp.delete_employee'],
+        'destroy': ['empapp.delete_employee'],
     }
 
     queryset = Employee.objects.all()
