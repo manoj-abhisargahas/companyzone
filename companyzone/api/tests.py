@@ -48,8 +48,8 @@ class CompanyZoneAPITests(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # SimpleJWT official output key checks
-        self.seertIn('access', response.data)
-        self.seertIn('refresh', response.data)
+        self.assertIn('access', response.data)
+        self.assertIn('refresh', response.data)
 
         """
         1. User Logs In  ──> [Send Password] ──> Django validates it
@@ -63,7 +63,7 @@ class CompanyZoneAPITests(APITestCase):
         """3. Verifies that the metadata form data endpoint can be fetched freely"""
         url = reverse('new_emp_form_data_url')
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTPS_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
     # ==============================================================
@@ -81,13 +81,13 @@ class CompanyZoneAPITests(APITestCase):
     def test_router_viewswet_list_is_accessible(self):
         """5. Verifies that the router base listing is open"""
         # DefaultRouter appends '-list' to the basename for top-level collection requests
-        url = reverse('modelviewset_emp_api_url')
+        url = reverse('modelviewset_emp_api_url-list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_router_viewswet_destroy_denies_anonymous_user(self):
         """6. Verifies that deleting via ModelViewSet requires active authorization"""
         # DefaultRouter appends '-detail' for resourse-specific path like entry modification
-        url = reverse('modelviewset_emp_api_url', kwargs={'pk':1})
+        url = reverse('modelviewset_emp_api_url-detail', kwargs={'pk':1})
         response = self.client.delete(url)
         self.assaertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
