@@ -64,14 +64,5 @@ jobs:
     # Execute migrations and backend logic verification, sub-app APIs, 
     # database integration, and DTL template verification
     - name: Run Full-Stack Tests
-      env:
-        DB_ENGINE: django.db.backends.mysql
-        DB_NAME: test_django_db
-        DB_USER: root
-        DB_PASSWORD: root_password
-        DB_HOST: 127.0.0.1
-        DB_PORT: 3306
-        #Tells your app to use a dummy/local storage storage backend instead of Cloudinary during tests
-        TESTING: "True"
       run: |
         python manage.py test
