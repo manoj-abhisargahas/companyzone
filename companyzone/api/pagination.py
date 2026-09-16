@@ -1,4 +1,5 @@
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import PageNumberPagination, NotFound
+from rest_framework.response import Response
 
 class StandardPagination(PageNumberPagination):
     page_size = 3 # Default size if client asks for nothing
@@ -18,13 +19,36 @@ class StandardPagination(PageNumberPagination):
     #   So set Absolute Limit, even if client asks 5000
     max_page_size = 100
 
-    def get_page_size(self, request):
-        user_req_page_size = request.query_params.get(self.page_size_query_param);
-        if user_req_page_size:
-            try:
-                page_size = int(user_req_page_size)
-                if page_size <= self.max_page_size:
-                    return page_size
-            except(ValueError, TypeError):
-                pass
-        return self.page_size
+    # No need for now:
+    # If someone passes an out-of-bounds page or weird text into the ?page= parameter, 
+    # paginate_queryset intercepts the crash and sends back an empty response (results: [])
+    # def get_page_size(self, request):
+    #     user_req_page_size = request.query_params.get(self.page_size_query_param);
+    #     if user_req_page_size:
+    #         try:
+    #             page_size = int(user_req_page_size)
+    #             if page_size <= self.max_page_size:
+    #                 return page_size
+    #         except(ValueError, TypeError):
+    #             pass
+    #     return self.page_size
+
+    def paginate_queryset(self, queryset, request, view=None):
+        try:
+            return super().paginate_queryset(queryset, request, view)
+        except NotFound:
+            self.request = request
+            self.page = None
+            # Use DRF's native variable name to store the count! 
+            self.count = queryset.count()
+            return []
+
+    def get_paginated_response(self, data):
+        if(self.page==None):
+            return Response({
+                'count': self.count,
+                'next': None,
+                'previous': None,
+                'results': data, # here data is []
+            })
+        return super().get_paginated_response(data)

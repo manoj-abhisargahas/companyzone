@@ -26,12 +26,12 @@ class Employee(models.Model):
     eno = models.IntegerField(primary_key=True)
     ename = models.CharField(max_length=30)
     esal = models.IntegerField()
-    epfpic = models.ImageField(upload_to='profile_pics', null=True)
-    eintvid = models.FileField(upload_to='interview_vids', storage=storages['videos'], null=True)
-    eresume = models.FileField(upload_to='resumes', storage=storages['raw'], null=True)
-    edept = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, 
+    epfpic = models.ImageField(upload_to='profile_pics', null=True, blank=True)
+    eintvid = models.FileField(upload_to='interview_vids', storage=storages['videos'], null=True, blank=True)
+    eresume = models.FileField(upload_to='resumes', storage=storages['raw'], null=True, blank=True)
+    edept = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True,
                               related_name='dept_emp') # Custom reverse relationship name
-    eloc = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True)
+    eloc = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         permissions = [

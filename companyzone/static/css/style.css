@@ -181,6 +181,11 @@ table.elev_box_mdl .fit {
     width: 1%;
 }
 
+table.elev_box_mdl .nowrap {
+    white-space: nowrap;
+    word-break: keep-all;
+}
+
 table.elev_box_mdl .nopad {
     padding: 0px;
 }

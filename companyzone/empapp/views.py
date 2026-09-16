@@ -148,8 +148,8 @@ def updateEmployee(request, emp_no):
         context = {'emp_no': emp_no,
                     'emp_name': eobj.ename,
                     'emp_sal': eobj.esal,
-                    'emp_dept': eobj.edept.dept_name if eobj.edept else None,
-                    'emp_loc': eobj.eloc.loc_name if eobj.eloc else None,
+                    'emp_dept': eobj.edept.dept_id if eobj.edept else None,
+                    'emp_loc': eobj.eloc.loc_id if eobj.eloc else None,
                     'depts': Department.objects.all(),
                     'locations': Location.objects.all()}
         
@@ -161,7 +161,7 @@ def updateEmployee(request, emp_no):
         result_type = 'noerror'
 
         emp_name = query_set.get('emp_name', "")
-        emp_sal = int(query_set.get('emp_sal', "")) #ValueError
+        emp_sal = query_set.get('emp_sal', "")
         emp_pfpic = request.FILES.get('emp_pfpic', None)
         emp_intvid = request.FILES.get('emp_intvid', None)
         emp_resume = request.FILES.get('emp_resume', None)
@@ -172,9 +172,9 @@ def updateEmployee(request, emp_no):
             # Everything inside this block is treated as a single, unbreakable unit
             with transaction.atomic():
                 eobj.ename = emp_name
-                eobj.esal = emp_sal
-                eobj.edept = Department.objects.get(dept_id=int(emp_dept)) if emp_dept!='' else None
-                eobj.eloc = Location.objects.get(loc_id=int(emp_loc)) if emp_loc!='' else None
+                eobj.esal = int(emp_sal)
+                eobj.edept = Department.objects.get(dept_id=int(emp_dept)) if emp_dept!=None and emp_dept!='' else None
+                eobj.eloc = Location.objects.get(loc_id=int(emp_loc)) if emp_loc!=None and emp_loc!='' else None
 
                 # 1. Backup old file targets before overwriting
                 old_pfpic = eobj.epfpic if emp_pfpic else None

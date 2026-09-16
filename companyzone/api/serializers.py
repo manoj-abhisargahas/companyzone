@@ -20,11 +20,32 @@ class EmpSerializer(serializers.ModelSerializer):
     #     For GET requests: Use the nested serializer to display the 
     #                       full department details (ID, name, etc.).
     #     For POST/PUT requests: Completely ignore this field during data validation.
-    edept = DepartmentSerializer(read_only=True)
-    eloc = LocationSerializer(read_only=True)
+    # edept = DepartmentSerializer(read_only=True)
+    # eloc = LocationSerializer(read_only=True)
     class Meta:
         model = Employee
         fields = ['eno','ename','esal','edept','eloc','epfpic']
+
+    # 1. DO NOT declare edept or eloc at the top anymore! 
+    # Let Django treat them as standard writeable relational fields (expecting simple IDs).
+    # It accepts "INBOUND" integer values because of how ModelSerializer works by default
+    # Because it sees a ForeignKey, DRF automatically configures that field internally as a PrimaryKeyRelatedField.
+    # Database Verification: It automatically runs a safe query under the hood, similar to: Department.objects.get(pk=2)
+
+    # 2. Override to_representation to change the "OUTBOUND" data format
+    def to_representation(self, instance):
+        # Get the standard flat primitive dictionary data (with IDs)
+        representation = super().to_representation(instance)
+
+        # Dynamically inject the full nested department data if it exists
+        if instance.edept:
+            representation['edept'] = DepartmentSerializer(instance.edept).data
+            # or = {'dept_id':instance.edept.dept_id, 'dept_name':instance.edept.dept_name}
+        if instance.eloc:
+            representation['eloc'] = LocationSerializer(instance.eloc).data
+            # or = {'loc_id':instance.eloc.loc_id, 'loc_name':instance.eloc.loc_name}
+
+        return representation
 
 class CustomEmpSerializer(serializers.Serializer):
     empno = serializers.IntegerField()
