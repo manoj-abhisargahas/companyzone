@@ -1,4 +1,4 @@
-<img width="300" src="https://github.com/manoj-abhisargahas/companyzone/blob/main/companyzone/static/images/companyzone-logo-horz.png" alt="project-app-logo">
+<img width="300" src="https://github.com/manoj-abhisargahas/companyzone_backend/blob/main/companyzone/static/images/companyzone-logo-horz.png" alt="project-app-logo">
 Check this backend project live at:&nbsp;&nbsp;https://companyzone.onrender.com/
 <br/><br/>
 
